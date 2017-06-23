@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ru.spbau.shevchenko.browser.MainActivity"
     android:orientation="vertical">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -18,14 +18,19 @@
             android:id="@+id/url_field"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_toLeftOf="@+id/tab_selector_button"
+            android:completionThreshold="2"
             android:inputType="textUri"
             android:lines="1"
             android:imeOptions="actionDone"/>
         <Button
             android:id="@+id/tab_selector_button"
+            android:layout_alignParentRight="true"
+            android:minWidth="0dp"
+            android:text="T"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </LinearLayout>
+    </RelativeLayout>
     <LinearLayout
         android:id="@+id/web_view_layout"
         android:layout_width="wrap_content"

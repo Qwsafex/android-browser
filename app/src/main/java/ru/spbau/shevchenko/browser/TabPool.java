@@ -9,10 +9,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class TabPool {
+    private final Browser browser;
     private LinkedList<WebView> openTabs;
     private LinkedList<WebView> freeTabs;
     private int capacity;
-    public TabPool(int poolSize) {
+    public TabPool(Browser browser, int poolSize) {
+        this.browser = browser;
         openTabs = new LinkedList<>();
         freeTabs = new LinkedList<>();
         capacity = poolSize;
@@ -26,15 +28,17 @@ public class TabPool {
         else { // TODO: use capacity
             view = createDefaultWebView(context);
         }
-        view.loadUrl(url);
+        if (!url.isEmpty()) {
+            view.loadUrl(url);
+        }
         openTabs.add(view);
         return view;
     }
 
     private WebView createDefaultWebView(Context context) {
         WebView webView = new WebView(context);
-        webView.setWebViewClient(new WebViewClient());
-        // webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebViewClient(new CustomWebClient(browser));
+         webView.getSettings().setJavaScriptEnabled(true);
         return webView;
     }
 

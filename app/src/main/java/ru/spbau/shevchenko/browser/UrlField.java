@@ -42,7 +42,7 @@ public class UrlField extends AppCompatAutoCompleteTextView {
 
         }
     };
-    private void refreshAutoComplete(String s) {
+    private void refreshAutoComplete(final String s) {
         final String debugTag = "refreshAC";
 
         if (s.length() < getThreshold()) return;
@@ -56,13 +56,19 @@ public class UrlField extends AppCompatAutoCompleteTextView {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(debugTag, "onResponse");
+                        Log.d(debugTag, response.toString());
                         try {
                             JSONArray jsonResponseStrings = response.getJSONArray(1);
                             ArrayList<String> responseStrings = new ArrayList<>();
                             for (int i = 0; i < jsonResponseStrings.length(); i++) {
                                 responseStrings.add(jsonResponseStrings.getString(i));
                             }
-                            setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, responseStrings));
+                            Log.d(debugTag, responseStrings.toString());
+                            if (getText().toString().equals(s)) {
+                                setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, responseStrings));
+//                                setSelection(s.length());
+                                showDropDown();
+                            }
                         } catch (JSONException e) {
                             // TODO: do smth
                         }
@@ -74,12 +80,6 @@ public class UrlField extends AppCompatAutoCompleteTextView {
                     }
                 });
         requestQueue.add(request);
-        /*
-        final String words[][] = {{"zero"}, {"one"}, {"two"}, {"aaa_three", "aaa_3", "aaa_drei"}, {"aaaa_four", "aaaa_4", "aaaa_vier"}, {"aaaaa_five", "aaaaa_5", "aaaaa_funf"}};
-        if (s.length() > 5)
-            return;
-        setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, words[s.length()]));
-        */
     }
 
     public UrlField(Context context) {
