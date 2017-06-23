@@ -2,6 +2,7 @@ package ru.spbau.shevchenko.browser;
 
 import android.content.Context;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -23,12 +24,20 @@ public class TabPool {
             freeTabs.removeFirst();
         }
         else { // TODO: use capacity
-            view = new WebView(context);
+            view = createDefaultWebView(context);
         }
         view.loadUrl(url);
         openTabs.add(view);
         return view;
     }
+
+    private WebView createDefaultWebView(Context context) {
+        WebView webView = new WebView(context);
+        webView.setWebViewClient(new WebViewClient());
+        // webView.getSettings().setJavaScriptEnabled(true);
+        return webView;
+    }
+
     public List<WebView> getAll() {
         return openTabs;
     }
