@@ -2,9 +2,9 @@ package ru.spbau.shevchenko.browser;
 
 import android.content.Context;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -52,5 +52,17 @@ public class TabPool {
             return true;
         }
         return false;
+    }
+
+    public void removeAll(ArrayList<Integer> closedTabs) {
+        // Indexes will change after remove so sort from biggest to lowest
+        Collections.sort(closedTabs, Collections.<Integer>reverseOrder());
+        for (int tabId : closedTabs) {
+            openTabs.remove(tabId);
+        }
+    }
+
+    public boolean contains(WebView tab) {
+        return openTabs.contains(tab);
     }
 }

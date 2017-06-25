@@ -15,14 +15,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements TextView.OnEditorActionListener, Browser, View.OnClickListener {
-    public static final String TAB_ID_EXTRA_KEY = "tab_id";
+    public static final String TAB_ID_KEY = "tab_id";
+    public static final String TAB_HEADERS_KEY = "tab_headers";
     public static final String NEW_TAB_EXTRA_KEY = "new_tab";
-    public static final String TAB_HEADERS_EXTRA_KEY = "tab_headers";
+    public static final String CLOSED_TABS_KEY = "closed_tabs";
 
     private static final int TAB_POOL_SIZE = 5;
     private static final String PROTOCOL_SEPARATOR = "://";
     private static final String DEFAULT_PROTOCOL = "http://";
     private static final int STUB_CODE = 0;
+    private static final int MAX_TAB_HEADER_LENGTH = 20;
     TabPool tabPool;
     WebView activeTab = null;
     private UrlField urlField;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
             }
             Log.d(debugTag, "handling DONE");
             if (activeTab == null) {
+                ((Button) findViewById(R.id.tab_selector_button)).setText("1");
                 Log.d(debugTag, "activeTab is null");
                 activeTab = tabPool.add(url, this);
                 webViewContainer = (ViewGroup) findViewById(R.id.web_view_layout);
@@ -87,10 +90,14 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
             ArrayList<TabHeader>  tabHeaders = new ArrayList<>();
             int i = 0;
             for (WebView tab : tabPool.getAll()) {
-                tabHeaders.add(new TabHeader(tab.getUrl(), i));
+                String tabHeader = tab.getUrl() == null ? "Empty tab" : tab.getTitle();
+                if (tabHeader.length() > MAX_TAB_HEADER_LENGTH) {
+                    tabHeader = tabHeader.substring(0, MAX_TAB_HEADER_LENGTH) + "...";
+                }
+                tabHeaders.add(new TabHeader(tabHeader, i));
                 i++;
             }
-            intent.putParcelableArrayListExtra(TAB_HEADERS_EXTRA_KEY, tabHeaders);
+            intent.putParcelableArrayListExtra(TAB_HEADERS_KEY, tabHeaders);
             startActivityForResult(intent, STUB_CODE);
         }
     }
@@ -99,6 +106,19 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         final String debugTag = "onActRes";
         Log.d(debugTag, "start");
+        ArrayList<Integer> closedTabs = data.getIntegerArrayListExtra(CLOSED_TABS_KEY);
+        if (closedTabs != null) {
+            Log.d(debugTag, "Closed tabs" + closedTabs);
+            tabPool.removeAll(closedTabs);
+            if (!tabPool.contains(activeTab)) {
+                if (!tabPool.getAll().isEmpty()) {
+                    setActiveTab(tabPool.getAll().get(0));
+                }
+                else {
+                    setActiveTab(null);
+                }
+            }
+        }
         if (resultCode == RESULT_OK) {
             Log.d(debugTag, "RESULT_OK");
             boolean newTabCreated = data.getBooleanExtra(NEW_TAB_EXTRA_KEY, false);
@@ -109,17 +129,28 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
                 urlField.setText("");
             }
             else { // user selected one of old tabs
-                int tab_id = data.getIntExtra(TAB_ID_EXTRA_KEY, 0); // TODO: constant
+                int tab_id = data.getIntExtra(TAB_ID_KEY, 0); // TODO: constant
                 Log.d(debugTag, "switched to tab " + tab_id);
                 newTab = tabPool.getAll().get(tab_id);
-                if (activeTab == newTab) {
-                    return;
-                }
                 urlField.setText(newTab.getUrl());
             }
-            activeTab = newTab;
-            webViewContainer.removeAllViews();
-            webViewContainer.addView(newTab);
+            setActiveTab(newTab);
         }
+
+        ((Button) findViewById(R.id.tab_selector_button)).setText(String.valueOf(tabPool.getAll().size()));
+    }
+
+    public void setActiveTab(WebView newActiveTab) {
+        if (activeTab == newActiveTab) {
+            return;
+        }
+        webViewContainer.removeAllViews();
+        activeTab = newActiveTab;
+        if (newActiveTab == null) {
+            urlField.setText("");
+            return;
+        }
+        webViewContainer.addView(activeTab);
+        urlField.setText(activeTab.getUrl());
     }
 }

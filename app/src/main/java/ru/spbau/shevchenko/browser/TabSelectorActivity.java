@@ -1,7 +1,6 @@
 package ru.spbau.shevchenko.browser;
 
 import android.content.Intent;
-import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,18 +13,23 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class TabSelectorActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
+    public enum Action {NEW_TAB, SWITCH_TAB, CLOSE_TAB};
+    private ArrayList<Integer> closedTabs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_selector);
 
-        ArrayList<Parcelable> parcelableTabs = getIntent().getParcelableArrayListExtra(MainActivity.TAB_HEADERS_EXTRA_KEY);
+        closedTabs = new ArrayList<>();
+
+        ArrayList<Parcelable> parcelableTabs = getIntent().getParcelableArrayListExtra(MainActivity.TAB_HEADERS_KEY);
         ArrayList<TabHeader> tabHeaders = new ArrayList<>();
         for (Parcelable parcelledTab : parcelableTabs) {
             tabHeaders.add((TabHeader) parcelledTab);
         }
         ListView tabList = (ListView) findViewById(R.id.tab_list);
-        tabList.setAdapter(new TabAdapter(this, tabHeaders));
+        tabList.setAdapter(new TabAdapter(this, tabHeaders, tabCloseHandler));
         tabList.setOnItemClickListener(this);
 
         Button addTabButton = (Button) findViewById(R.id.add_tab_button);
@@ -35,9 +39,8 @@ public class TabSelectorActivity extends AppCompatActivity implements AdapterVie
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent data = new Intent();
-        data.putExtra(MainActivity.TAB_ID_EXTRA_KEY, position);
-        setResult(RESULT_OK, data);
-        finish();
+        data.putExtra(MainActivity.TAB_ID_KEY, position);
+        finish(data);
     }
 
     @Override
@@ -47,8 +50,30 @@ public class TabSelectorActivity extends AppCompatActivity implements AdapterVie
         if (v.getId() == R.id.add_tab_button) {
             Intent data = new Intent();
             data.putExtra(MainActivity.NEW_TAB_EXTRA_KEY, true);
-            setResult(RESULT_OK, data);
-            finish();
+            finish(data);
         }
     }
+
+    private void finish(Intent data) {
+        finish(RESULT_OK, data);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        finish(RESULT_CANCELED, new Intent());
+    }
+
+    private void finish(int resultCode, Intent data) {
+        data.putIntegerArrayListExtra(MainActivity.CLOSED_TABS_KEY, closedTabs);
+        setResult(resultCode, data);
+        finish();
+    }
+
+    private Handler<Integer> tabCloseHandler = new Handler<Integer>() {
+        @Override
+        public void handle(Integer id) {
+            closedTabs.add(id);
+        }
+    };
 }
