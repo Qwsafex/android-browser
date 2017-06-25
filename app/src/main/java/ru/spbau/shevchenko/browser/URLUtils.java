@@ -14,8 +14,9 @@ public class URLUtils {
 
     /**
      * Determines if given string is URL or search request and gives appropriate URL.
-     *
+     * <p>
      * Adds protocol to the beginning of URL if needed.
+     *
      * @param url user-typed URL
      * @return URL of site that user wanted or URL of search engine request
      */
@@ -25,14 +26,14 @@ public class URLUtils {
         }
         if (url.contains(" ") || !url.contains(".")) {
             return yandexSearchUrl(url);
-        }
-        else {
+        } else {
             return DEFAULT_PROTOCOL + url;
         }
     }
 
     /**
      * Returns URL of Yandex.Search with given request
+     *
      * @param request search request
      * @return URL of Yandex.Search with given request
      */

@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
         android:id="@+id/tab_url"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
-        />
+        android:textSize="@dimen/tab_header_fontsize"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/close_tab_button"
+        android:layout_toStartOf="@+id/close_tab_button"
+        android:maxLines="1"
+        android:ellipsize="end"
+         />
     <Button
         android:id="@+id/close_tab_button"
-        android:text="XXX"
+        android:text="@string/close_tab_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:focusable="false" />
-</LinearLayout>
+</RelativeLayout>

@@ -6,7 +6,7 @@
     tools:context="ru.spbau.shevchenko.browser.tabs.TabSelectorActivity">
     <Button
         android:id="@+id/add_tab_button"
-        android:text="ADD TAB"
+        android:text="@string/add_tab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"/>

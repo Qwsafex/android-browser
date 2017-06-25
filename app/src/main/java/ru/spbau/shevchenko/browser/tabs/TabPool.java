@@ -1,7 +1,6 @@
 package ru.spbau.shevchenko.browser.tabs;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,15 +31,12 @@ public class TabPool {
      * @return newly opened Tab
      */
     public Tab add(String url, Context context) {
-        final String debugTab = "TabPool.add";
         Tab view;
         if (!freeTabs.isEmpty()) {
-            Log.d(debugTab, "using old tab");
             view = freeTabs.getFirst();
             freeTabs.removeFirst();
         }
-        else { // TODO: use capacity
-            Log.d(debugTab, "creating new tab");
+        else {
             view = tabFactory.createTab(context);
         }
         if (!url.isEmpty()) {

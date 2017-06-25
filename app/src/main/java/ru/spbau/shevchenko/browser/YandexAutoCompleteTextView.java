@@ -31,13 +31,12 @@ public class YandexAutoCompleteTextView extends AppCompatAutoCompleteTextView {
 
     /**
      * Set text without triggering autocomplete
+     *
      * @param text text to set
      */
     public void setTextProgrammatically(CharSequence text) {
         dontRefresh = true;
-        Log.d("sTProg", "setting");
         setText(text);
-        Log.d("sTProg", "finished setting");
         dontRefresh = false;
     }
 
@@ -57,35 +56,28 @@ public class YandexAutoCompleteTextView extends AppCompatAutoCompleteTextView {
     }
 
     private void refreshAutoComplete(final String s) {
-        final String debugTag = "refreshAC";
-
         if (s.length() < getThreshold()) return;
 
-        Log.d(debugTag, "adding request");
-        Log.d(debugTag, "string part: " + s);
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(getContext());
         }
         try {
             JsonArrayRequest request = new JsonArrayRequest(YANDEX_SUGGGEST_URL + URLEncoder.encode(s, "utf-8"),
-                    new Response.Listener<JSONArray>(){
+                    new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
-                            Log.d(debugTag, "onResponse");
-                            Log.d(debugTag, response.toString());
                             try {
                                 JSONArray jsonResponseStrings = response.getJSONArray(1);
                                 ArrayList<String> responseStrings = new ArrayList<>();
                                 for (int i = 0; i < jsonResponseStrings.length(); i++) {
                                     responseStrings.add(jsonResponseStrings.getString(i));
                                 }
-                                Log.d(debugTag, responseStrings.toString());
                                 if (getText().toString().equals(s)) {
                                     setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, responseStrings));
                                     showDropDown();
                                 }
                             } catch (JSONException e) {
-                                // TODO: do smth
+                                Log.e("Exception", "YandexAutoCompleteTextView.refreshAutoComplete " + e.getMessage());
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -96,9 +88,10 @@ public class YandexAutoCompleteTextView extends AppCompatAutoCompleteTextView {
             });
             requestQueue.add(request);
         } catch (UnsupportedEncodingException e) {
-            Log.e(debugTag, "UNSUPPORTED ENCODING UTF-8");
+            Log.e("Exception", "UNSUPPORTED ENCODING UTF-8");
         }
     }
+
 
     private TextWatcher textChangedWatcher = new TextWatcher() {
         @Override
@@ -108,7 +101,6 @@ public class YandexAutoCompleteTextView extends AppCompatAutoCompleteTextView {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            Log.d("onTextChanged", "entering");
             if (!dontRefresh) {
                 refreshAutoComplete(s.toString());
             }

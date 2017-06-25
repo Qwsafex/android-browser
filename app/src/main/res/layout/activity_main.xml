@@ -19,7 +19,7 @@
             android:completionThreshold="2"
             android:inputType="textUri"
             android:lines="1"
-            android:imeOptions="actionDone"/>
+            android:imeOptions="actionSearch"/>
         <Button
             android:id="@+id/tab_selector_button"
             android:layout_alignParentRight="true"

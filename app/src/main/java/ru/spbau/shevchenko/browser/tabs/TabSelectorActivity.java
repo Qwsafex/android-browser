@@ -1,10 +1,9 @@
 package ru.spbau.shevchenko.browser.tabs;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -48,8 +47,6 @@ public class TabSelectorActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onClick(View v) {
-        final String debugTag = "tabSelAdd";
-        Log.d(debugTag, "start");
         if (v.getId() == R.id.add_tab_button) {
             Intent data = new Intent();
             data.putExtra(MainActivity.NEW_TAB_EXTRA_KEY, true);
