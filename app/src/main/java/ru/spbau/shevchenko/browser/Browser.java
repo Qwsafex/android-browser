@@ -1,5 +1,5 @@
 package ru.spbau.shevchenko.browser;
 
-interface Browser {
+public interface Browser {
     void onPageStarted(String url);
 }

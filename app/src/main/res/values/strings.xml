@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Browser</string>
+    <string name="default_tab_button_text">0</string>
 </resources>

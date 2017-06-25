@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.spbau.shevchenko.browser.TabSelectorActivity">
+    tools:context="ru.spbau.shevchenko.browser.tabs.TabSelectorActivity">
     <Button
         android:id="@+id/add_tab_button"
         android:text="ADD TAB"

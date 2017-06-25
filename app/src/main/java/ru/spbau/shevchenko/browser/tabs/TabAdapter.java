@@ -1,5 +1,6 @@
-package ru.spbau.shevchenko.browser;
+package ru.spbau.shevchenko.browser.tabs;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import ru.spbau.shevchenko.browser.Handler;
+import ru.spbau.shevchenko.browser.R;
+
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 class TabAdapter extends BaseAdapter {
@@ -17,7 +21,7 @@ class TabAdapter extends BaseAdapter {
     private final Context context;
     private final Handler<Integer> closeHandler;
 
-    public TabAdapter(Context context, ArrayList<TabHeader> tabHeaders, Handler<Integer> closeHandler) {
+    TabAdapter(Context context, ArrayList<TabHeader> tabHeaders, Handler<Integer> closeHandler) {
         this.tabHeaders = tabHeaders;
         this.context = context;
         this.closeHandler = closeHandler;
@@ -38,6 +42,7 @@ class TabAdapter extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {

@@ -1,8 +1,6 @@
 package ru.spbau.shevchenko.browser;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.AttributeSet;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 

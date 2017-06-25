@@ -1,4 +1,4 @@
-package ru.spbau.shevchenko.browser;
+package ru.spbau.shevchenko.browser.tabs;
 
 import android.content.Intent;
 import android.os.Parcelable;
@@ -12,8 +12,11 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import ru.spbau.shevchenko.browser.Handler;
+import ru.spbau.shevchenko.browser.MainActivity;
+import ru.spbau.shevchenko.browser.R;
+
 public class TabSelectorActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
-    public enum Action {NEW_TAB, SWITCH_TAB, CLOSE_TAB};
     private ArrayList<Integer> closedTabs;
 
     @Override
