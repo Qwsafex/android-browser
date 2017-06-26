@@ -40,12 +40,13 @@
             android:layout_alignParentEnd="true"
             android:contentDescription="@string/close_tab" />
     </RelativeLayout>
-    <ImageButton
+    <ImageView
         android:id="@+id/tab_screencapture"
         android:background="@color/transparent"
         android:layout_below="@+id/first_row"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:contentDescription="@string/tab_screencapture" />
+        android:contentDescription="@string/tab_screencapture"
+        android:visibility="gone"/>
 </RelativeLayout>

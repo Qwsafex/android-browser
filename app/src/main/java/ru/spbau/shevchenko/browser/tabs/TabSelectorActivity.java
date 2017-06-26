@@ -36,8 +36,11 @@ public class TabSelectorActivity extends AppCompatActivity implements AdapterVie
         closedTabs = new ArrayList<>();
 
         List<TabHeader> tabHeaders = DataHolder.getData();
+        TabAdapter tabAdapter = new TabAdapter(this, tabHeaders, tabCloseHandler);
+        tabAdapter.setItemClickListener(this);
+
         ListView tabList = (ListView) findViewById(R.id.tab_list);
-        tabList.setAdapter(new TabAdapter(this, tabHeaders, tabCloseHandler));
+        tabList.setAdapter(tabAdapter);
         tabList.setOnItemClickListener(this);
 
         ImageButton addTabButton = (ImageButton) findViewById(R.id.add_tab_button);

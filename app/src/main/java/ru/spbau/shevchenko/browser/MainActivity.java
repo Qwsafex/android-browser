@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,13 +83,16 @@ public class MainActivity extends AppCompatActivity implements Browser, View.OnC
 
     @Override
     public void onBackPressed() {
-        if (activeTab != null) {
+        if (activeTab != null && activeTab.getUrl() != null) {
             activeTab.goBack();
         }
     }
 
     @Override
     public void onPageStarted(String url) {
+        if (activeTab != null) {
+            activeTab.invalidateCachedSnapshot();
+        }
         urlField.setTextProgrammatically(url);
         urlField.dismissDropDown();
         refreshButton.setVisibility(View.VISIBLE);
@@ -111,20 +113,24 @@ public class MainActivity extends AppCompatActivity implements Browser, View.OnC
                     Tab tab = tabPool.getAll().get(i);
                     String tabTitle = tab.getUrl() == null ? "Empty tab" : tab.getTitle();
                     Bitmap tabScreencapture = tab.getBitmap();
+                    Bitmap icon = tab.getFavicon();
+                    if (tab.getUrl() == null) {
+                        icon = null;
+                        tabScreencapture = null;
+                    }
                     if (tabScreencapture != null) {
                         int dstWidth = (int) ((1.0 * MAX_SCREENCAPTURE_HEIGHT / tabScreencapture.getHeight())
                                 * tabScreencapture.getWidth());
                         tabScreencapture = Bitmap.createScaledBitmap(tabScreencapture, dstWidth,
                                 MAX_SCREENCAPTURE_HEIGHT, false);
                     }
-                    tabHeaders.add(new TabHeader(i, tabTitle, tab.getFavicon(), tabScreencapture));
+                    tabHeaders.add(new TabHeader(i, tabTitle, icon, tabScreencapture));
                 }
                 TabSelectorActivity.startActivityForResult(this, tabHeaders, TAB_SELECTOR_RESULT_CODE);
                 break;
             }
             case R.id.refresh_button: {
                 if (activeTab != null) {
-                    Log.d("onCLick", "reloading");
                     activeTab.reload();
                 }
                 break;

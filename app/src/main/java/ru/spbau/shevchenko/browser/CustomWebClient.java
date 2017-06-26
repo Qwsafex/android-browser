@@ -16,4 +16,5 @@ public class CustomWebClient extends WebViewClient {
         browser.onPageStarted(url);
         super.onPageStarted(view, url, favicon);
     }
+
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,11 +22,16 @@ class TabAdapter extends BaseAdapter {
     private final List<TabHeader> tabHeaders;
     private final Context context;
     private final Function<Integer> closeHandler;
+    private AdapterView.OnItemClickListener itemClickListener;
 
     TabAdapter(Context context, List<TabHeader> tabHeaders, Function<Integer> closeHandler) {
         this.tabHeaders = tabHeaders;
         this.context = context;
         this.closeHandler = closeHandler;
+    }
+
+    void setItemClickListener(AdapterView.OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
     }
 
     @Override
@@ -52,8 +58,24 @@ class TabAdapter extends BaseAdapter {
         }
         final TabHeader tabHeader = tabHeaders.get(position);
         ((ImageView) convertView.findViewById(R.id.tab_icon)).setImageBitmap(tabHeader.getIcon());
-        ((ImageView) convertView.findViewById(R.id.tab_screencapture))
-                .setImageBitmap(tabHeader.getScreencapture());
+
+        ImageView screencaptureView = (ImageView) convertView.findViewById(R.id.tab_screencapture);
+        if (tabHeader.getScreencapture() != null) {
+            screencaptureView.setImageBitmap(tabHeader.getScreencapture());
+            screencaptureView.setVisibility(View.VISIBLE);
+        } else {
+            screencaptureView.setImageBitmap(null);
+            screencaptureView.setVisibility(View.GONE);
+        }
+
+
+        final View viewToClick = convertView;
+        screencaptureView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemClickListener.onItemClick(null, viewToClick, position, position);
+            }
+        });
         ((TextView) convertView.findViewById(R.id.tab_url)).setText(tabHeader.getTitle());
 
         ImageButton closeTabButton = (ImageButton) convertView.findViewById(R.id.close_tab_button);
