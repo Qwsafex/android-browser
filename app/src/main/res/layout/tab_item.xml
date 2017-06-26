@@ -1,25 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
      android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/tab_url"
+    android:layout_height="match_parent"
+    android:layout_gravity="center" android:descendantFocusability="blocksDescendants" >
+    <RelativeLayout
+        android:id="@+id/first_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/tab_icon"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_width="@dimen/tab_icon_size"
+            android:layout_height="@dimen/tab_icon_size"
+            android:contentDescription="@string/tab_icon"
+            android:focusable="false"
+            android:layout_margin="5dp"/>
+        <TextView
+            android:id="@+id/tab_url"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/tab_header_fontsize"
+            android:gravity="center_vertical|start"
+            android:layout_toRightOf="@id/tab_icon"
+            android:layout_toEndOf="@id/tab_icon"
+            android:layout_toLeftOf="@+id/close_tab_button"
+            android:layout_toStartOf="@+id/close_tab_button"
+            android:maxLines="1"
+            android:ellipsize="end"
+            />
+        <ImageButton
+            android:id="@+id/close_tab_button"
+            android:src="@drawable/close_tab"
+            android:background="@color/transparent"
+            android:layout_width="@dimen/tab_icon_size"
+            android:layout_height="@dimen/tab_icon_size"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/close_tab" />
+    </RelativeLayout>
+    <ImageButton
+        android:id="@+id/tab_screencapture"
+        android:background="@color/transparent"
+        android:layout_below="@+id/first_row"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/tab_header_fontsize"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/close_tab_button"
-        android:layout_toStartOf="@+id/close_tab_button"
-        android:maxLines="1"
-        android:ellipsize="end"
-         />
-    <Button
-        android:id="@+id/close_tab_button"
-        android:text="@string/close_tab_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:focusable="false" />
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/tab_screencapture" />
 </RelativeLayout>

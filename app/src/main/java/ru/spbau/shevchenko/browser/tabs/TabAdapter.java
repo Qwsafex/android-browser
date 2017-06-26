@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -49,13 +51,17 @@ class TabAdapter extends BaseAdapter {
             final LayoutInflater messageInflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
             convertView = messageInflater.inflate(R.layout.tab_item, null);
         }
-        ((TextView) convertView.findViewById(R.id.tab_url)).setText(tabHeaders.get(position).getUrl());
-        Button closeTabButton = (Button) convertView.findViewById(R.id.close_tab_button);
+        final TabHeader tabHeader = tabHeaders.get(position);
+        ((ImageView) convertView.findViewById(R.id.tab_icon)).setImageBitmap(tabHeader.getIcon());
+        ((ImageView) convertView.findViewById(R.id.tab_screencapture))
+                .setImageBitmap(tabHeader.getScreencapture());
+        ((TextView) convertView.findViewById(R.id.tab_url)).setText(tabHeader.getTitle());
+        ImageButton closeTabButton = (ImageButton) convertView.findViewById(R.id.close_tab_button);
         closeTabButton.setTag(position);
         closeTabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                closeHandler.handle(tabHeaders.get(position).getId());
+                closeHandler.handle(tabHeader.getId());
                 tabHeaders.remove(position);
                 notifyDataSetChanged();
             }

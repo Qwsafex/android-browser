@@ -1,5 +1,6 @@
 package ru.spbau.shevchenko.browser.tabs;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -7,7 +8,9 @@ public class TabHeader implements Parcelable{
     public static final Parcelable.Creator<TabHeader> CREATOR
             = new Parcelable.Creator<TabHeader>() {
         public TabHeader createFromParcel(Parcel in) {
-            return new TabHeader(in.readString(), in.readInt());
+            return new TabHeader(in.readInt(), in.readString(),
+                    (Bitmap) in.readParcelable(Bitmap.class.getClassLoader()),
+                    (Bitmap) in.readParcelable(Bitmap.class.getClassLoader()));
         }
 
         public TabHeader[] newArray(int size) {
@@ -15,17 +18,21 @@ public class TabHeader implements Parcelable{
         }
     };
 
-    private final String url;
     private final int id;
+    private final String title;
+    private final Bitmap icon;
+    private final Bitmap screencapture;
 
-    public TabHeader(String url, int id) {
-        this.url = url;
+    public TabHeader(int id, String title, Bitmap icon, Bitmap screencapture) {
+        this.title = title;
         this.id = id;
+        this.icon = icon;
+        this.screencapture = screencapture;
     }
 
     @SuppressWarnings("WeakerAccess")
-    public String getUrl() {
-        return url;
+    public String getTitle() {
+        return title;
     }
 
     public int getId() {
@@ -37,9 +44,19 @@ public class TabHeader implements Parcelable{
         return 0;
     }
 
+    public Bitmap getScreencapture() {
+        return screencapture;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(url);
         dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeParcelable(icon, 0);
+        dest.writeParcelable(screencapture, 0);
+    }
+
+    public Bitmap getIcon() {
+        return icon;
     }
 }

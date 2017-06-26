@@ -1,6 +1,7 @@
 package ru.spbau.shevchenko.browser.tabs;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.webkit.WebView;
@@ -13,14 +14,21 @@ public class Tab extends WebView {
 
     public Tab(Context context) {
         super(context);
+        setDrawingCacheEnabled(true);
     }
 
     public Tab(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setDrawingCacheEnabled(true);
     }
 
     public Tab(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        setDrawingCacheEnabled(true);
+    }
+
+    public Bitmap getBitmap() {
+        return getDrawingCache();
     }
 
     /**

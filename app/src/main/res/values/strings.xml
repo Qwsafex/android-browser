@@ -3,4 +3,7 @@
     <string name="default_tab_button_text">0</string>
     <string name="close_tab_text">XXX</string>
     <string name="add_tab">Add Tab</string>
+    <string name="tab_icon">Tab icon</string>
+    <string name="close_tab">Close tab</string>
+    <string name="tab_screencapture">Tab screencapture</string>
 </resources>

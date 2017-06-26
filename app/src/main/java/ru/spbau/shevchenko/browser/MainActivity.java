@@ -2,8 +2,10 @@ package ru.spbau.shevchenko.browser;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements Browser, View.OnC
     public static final String CLOSED_TABS_KEY = "closed_tabs";
 
     private static final int TAB_SELECTOR_RESULT_CODE = 0;
+    private static final int MAX_SCREENCAPTURE_HEIGHT = 200;
 
     private TabPool tabPool;
     private Tab activeTab = null;
@@ -72,8 +75,14 @@ public class MainActivity extends AppCompatActivity implements Browser, View.OnC
             ArrayList<TabHeader> tabHeaders = new ArrayList<>();
             for (int i = 0; i < tabPool.getAll().size(); i++) {
                 Tab tab = tabPool.getAll().get(i);
-                String tabHeader = tab.getUrl() == null ? "Empty tab" : tab.getTitle();
-                tabHeaders.add(new TabHeader(tabHeader, i));
+                String tabTitle = tab.getUrl() == null ? "Empty tab" : tab.getTitle();
+                Bitmap tabScreencapture = tab.getBitmap();
+                int dstWidth = (int) ((1.0 * MAX_SCREENCAPTURE_HEIGHT / tabScreencapture.getHeight())
+                                        * tabScreencapture.getWidth());
+                Bitmap scaledCapture = Bitmap.createScaledBitmap(tabScreencapture, dstWidth,
+                        MAX_SCREENCAPTURE_HEIGHT, false);
+                //tabScreencapture.recycle();
+                tabHeaders.add(new TabHeader(i, tabTitle, tab.getFavicon(), scaledCapture));
             }
             intent.putParcelableArrayListExtra(TAB_HEADERS_KEY, tabHeaders);
             startActivityForResult(intent, TAB_SELECTOR_RESULT_CODE);
@@ -106,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements Browser, View.OnC
             } else { // user selected one of old tabs
                 int tab_id = data.getIntExtra(TAB_ID_KEY, 0);
                 newTab = tabPool.getAll().get(tab_id);
-                urlField.setText(newTab.getUrl());
             }
             setActiveTab(newTab);
         }
@@ -122,13 +130,11 @@ public class MainActivity extends AppCompatActivity implements Browser, View.OnC
         webViewContainer.removeAllViews();
         activeTab = newActiveTab;
         if (newActiveTab == null) {
-            urlField.setText("");
+            urlField.setTextProgrammatically("");
             return;
         }
         webViewContainer.addView(activeTab);
-        urlField.setText(activeTab.getUrl());
-        // pops up because text is changed
-        urlField.dismissDropDown();
+        urlField.setTextProgrammatically(activeTab.getUrl());
     }
 
     private void loadPage(String url) {
