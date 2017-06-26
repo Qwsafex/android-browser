@@ -14,21 +14,41 @@
             android:id="@+id/url_field"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_toLeftOf="@+id/tab_selector_button"
-            android:layout_toStartOf="@+id/tab_selector_button"
-            android:completionThreshold="2"
+            android:layout_toLeftOf="@+id/refresh_button"
+            android:layout_toStartOf="@+id/refresh_button"
+            android:completionThreshold="@integer/url_completion_threshold"
             android:inputType="textUri"
             android:lines="1"
             android:imeOptions="actionSearch"/>
+        <ImageButton
+            android:id="@+id/refresh_button"
+            android:src="@drawable/refresh_tab"
+            android:background="@color/transparent"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/tab_selector_button"
+            android:layout_toStartOf="@+id/tab_selector_button"
+            android:contentDescription="@string/refresh_tab"
+            android:visibility="gone"/>
         <Button
             android:id="@+id/tab_selector_button"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:minWidth="0dp"
+            android:minWidth="40dp"
             android:text="@string/default_tab_button_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
     </RelativeLayout>
+    <ProgressBar
+        android:id="@+id/page_loading_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/progressbar_height"
+        android:layout_marginBottom="2dp"
+        android:visibility="gone"/>
+
 
     <LinearLayout
         android:id="@+id/web_view_layout"

@@ -24,9 +24,10 @@ public class TabPool {
 
     /**
      * Puts new {@link Tab} into corresponding pool.
-     *
+     * <p>
      * If there are tabs in a used-tabs-pool it takes one from there, else it creates new Tab.
-     * @param url URL to load in new tab or empty string for empty tab
+     *
+     * @param url     URL to load in new tab or empty string for empty tab
      * @param context a Context object used to access application assets
      * @return newly opened Tab
      */
@@ -35,8 +36,7 @@ public class TabPool {
         if (!freeTabs.isEmpty()) {
             view = freeTabs.getFirst();
             freeTabs.removeFirst();
-        }
-        else {
+        } else {
             view = tabFactory.createTab(context);
         }
         if (!url.isEmpty()) {
@@ -48,6 +48,7 @@ public class TabPool {
 
     /**
      * Returns all opened tabs.
+     *
      * @return all opened tabs
      */
     public List<Tab> getAll() {
@@ -64,6 +65,7 @@ public class TabPool {
 
     /**
      * Checks if given tab is opened.
+     *
      * @param tab tab to check
      * @return true if given tab is in open-tabs-pool and false otherwise
      */

@@ -27,14 +27,22 @@ public class Tab extends WebView {
         setDrawingCacheEnabled(true);
     }
 
+    /**
+     * Returns Bitmap of this Tab screencapture.
+     * <p>
+     * For unknown reasons returned Bitmap may represent Tab's state at some point in past.
+     *
+     * @return screencapture of this Tab
+     */
     public Bitmap getBitmap() {
         return getDrawingCache();
     }
 
     /**
      * Returns page URL.
-     *
+     * <p>
      * If it is "about:blank" returns null.
+     *
      * @return URL of page or null
      */
     @Override
@@ -46,8 +54,7 @@ public class Tab extends WebView {
         }
         if (super.getUrl().equals(BLANK_URL)) {
             return null;
-        }
-        else {
+        } else {
             return super.getUrl();
         }
     }
@@ -59,4 +66,5 @@ public class Tab extends WebView {
         loadUrl(BLANK_URL);
         clearHistory();
     }
+
 }

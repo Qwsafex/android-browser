@@ -1,21 +1,31 @@
 package ru.spbau.shevchenko.browser.tabs;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import ru.spbau.shevchenko.browser.Handler;
+import ru.spbau.shevchenko.browser.Function;
 import ru.spbau.shevchenko.browser.MainActivity;
 import ru.spbau.shevchenko.browser.R;
 
 public class TabSelectorActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
+    public static void startActivityForResult(final Activity activity, final List<TabHeader> tabHeaders, int requestCode) {
+
+        final Intent intent = new Intent(activity, TabSelectorActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        DataHolder.setData(tabHeaders);
+
+        activity.startActivityForResult(intent, requestCode);
+    }
+
     private ArrayList<Integer> closedTabs;
 
     @Override
@@ -25,16 +35,12 @@ public class TabSelectorActivity extends AppCompatActivity implements AdapterVie
 
         closedTabs = new ArrayList<>();
 
-        ArrayList<Parcelable> parcelableTabs = getIntent().getParcelableArrayListExtra(MainActivity.TAB_HEADERS_KEY);
-        ArrayList<TabHeader> tabHeaders = new ArrayList<>();
-        for (Parcelable parcelledTab : parcelableTabs) {
-            tabHeaders.add((TabHeader) parcelledTab);
-        }
+        List<TabHeader> tabHeaders = DataHolder.getData();
         ListView tabList = (ListView) findViewById(R.id.tab_list);
         tabList.setAdapter(new TabAdapter(this, tabHeaders, tabCloseHandler));
         tabList.setOnItemClickListener(this);
 
-        Button addTabButton = (Button) findViewById(R.id.add_tab_button);
+        ImageButton addTabButton = (ImageButton) findViewById(R.id.add_tab_button);
         addTabButton.setOnClickListener(this);
     }
 
@@ -54,26 +60,45 @@ public class TabSelectorActivity extends AppCompatActivity implements AdapterVie
         }
     }
 
-    private void finish(Intent data) {
-        finish(RESULT_OK, data);
-    }
-
-
     @Override
     public void onBackPressed() {
         finish(RESULT_CANCELED, new Intent());
     }
 
+    private void finish(Intent data) {
+        finish(RESULT_OK, data);
+    }
+
+
+    /**
+     * Puts closedTabs in intent before finishing.
+     */
     private void finish(int resultCode, Intent data) {
         data.putIntegerArrayListExtra(MainActivity.CLOSED_TABS_KEY, closedTabs);
         setResult(resultCode, data);
         finish();
     }
 
-    private Handler<Integer> tabCloseHandler = new Handler<Integer>() {
+    private Function<Integer> tabCloseHandler = new Function<Integer>() {
         @Override
-        public void handle(Integer id) {
+        public void call(Integer id) {
             closedTabs.add(id);
         }
     };
+
+    private enum DataHolder {
+        INSTANCE;
+
+        private List<TabHeader> tabHeaders;
+
+        public static void setData(final List<TabHeader> tabHeaders) {
+            INSTANCE.tabHeaders = tabHeaders;
+        }
+
+        public static List<TabHeader> getData() {
+            final List<TabHeader> resultingList = INSTANCE.tabHeaders;
+            INSTANCE.tabHeaders = null;
+            return resultingList;
+        }
+    }
 }

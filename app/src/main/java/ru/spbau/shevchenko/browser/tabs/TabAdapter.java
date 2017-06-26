@@ -6,24 +6,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import ru.spbau.shevchenko.browser.Handler;
+import ru.spbau.shevchenko.browser.Function;
 import ru.spbau.shevchenko.browser.R;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 class TabAdapter extends BaseAdapter {
-    private final ArrayList<TabHeader> tabHeaders;
+    private final List<TabHeader> tabHeaders;
     private final Context context;
-    private final Handler<Integer> closeHandler;
+    private final Function<Integer> closeHandler;
 
-    TabAdapter(Context context, ArrayList<TabHeader> tabHeaders, Handler<Integer> closeHandler) {
+    TabAdapter(Context context, List<TabHeader> tabHeaders, Function<Integer> closeHandler) {
         this.tabHeaders = tabHeaders;
         this.context = context;
         this.closeHandler = closeHandler;
@@ -56,12 +55,12 @@ class TabAdapter extends BaseAdapter {
         ((ImageView) convertView.findViewById(R.id.tab_screencapture))
                 .setImageBitmap(tabHeader.getScreencapture());
         ((TextView) convertView.findViewById(R.id.tab_url)).setText(tabHeader.getTitle());
+
         ImageButton closeTabButton = (ImageButton) convertView.findViewById(R.id.close_tab_button);
-        closeTabButton.setTag(position);
         closeTabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                closeHandler.handle(tabHeader.getId());
+                closeHandler.call(tabHeader.getId());
                 tabHeaders.remove(position);
                 notifyDataSetChanged();
             }

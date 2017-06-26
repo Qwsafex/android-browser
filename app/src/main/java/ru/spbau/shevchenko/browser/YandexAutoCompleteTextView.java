@@ -77,6 +77,7 @@ public class YandexAutoCompleteTextView extends AppCompatAutoCompleteTextView {
                                     showDropDown();
                                 }
                             } catch (JSONException e) {
+                                // That's not critical, just log it
                                 Log.e("Exception", "YandexAutoCompleteTextView.refreshAutoComplete " + e.getMessage());
                             }
                         }
@@ -88,6 +89,7 @@ public class YandexAutoCompleteTextView extends AppCompatAutoCompleteTextView {
             });
             requestQueue.add(request);
         } catch (UnsupportedEncodingException e) {
+            // That's not critical, just log it
             Log.e("Exception", "UNSUPPORTED ENCODING UTF-8");
         }
     }

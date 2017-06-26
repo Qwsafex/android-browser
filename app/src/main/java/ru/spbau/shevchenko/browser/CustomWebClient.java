@@ -4,12 +4,13 @@ import android.graphics.Bitmap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class CustomWebClient extends WebViewClient{
+public class CustomWebClient extends WebViewClient {
     private final Browser browser;
 
     public CustomWebClient(Browser browser) {
         this.browser = browser;
     }
+
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
         browser.onPageStarted(url);

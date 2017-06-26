@@ -24,6 +24,7 @@ public class DefaultTabFactory implements TabFactory {
         Tab webView = new Tab(context);
         webView.setWebViewClient(new CustomWebClient(browser));
         WebSettings settings = webView.getSettings();
+        // I'm aware of XSS vulnerabilities that come with JS, but enabled it just for fun
         settings.setJavaScriptEnabled(true);
         settings.setBuiltInZoomControls(true);
         settings.setDisplayZoomControls(false);

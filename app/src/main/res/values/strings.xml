@@ -6,4 +6,5 @@
     <string name="tab_icon">Tab icon</string>
     <string name="close_tab">Close tab</string>
     <string name="tab_screencapture">Tab screencapture</string>
+    <string name="refresh_tab">Refresh tab</string>
 </resources>
